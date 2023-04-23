@@ -4,7 +4,8 @@
   "description": "backend for stydyscrapper",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index"
+    "dev": "nodemon index",
+    "start": "node index"
   },
   "author": "karthikeya",
   "license": "ISC",
