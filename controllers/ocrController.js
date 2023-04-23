@@ -18,32 +18,35 @@ formData.append("file", new Blob([file], { type: "image/jpeg" }), "image.jpg"); 
 const ocrController = async (req, res, next) => {
   console.log(req.file);
   console.log(req.file.buffer);
+  try {
+    const formData = new FormData();
+    const file = fs.readFileSync(req.file.path);
+    formData.append(
+      "file",
+      new Blob([file], { type: req.file.mimetype }),
+      req.file.originalname
+    );
+    console.log(apikey);
+    const response = await axios.post(url, formData, {
+      headers: {
+        apikey: apikey,
+        OCREngine: 2,
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-  const formData = new FormData();
-  const file = fs.readFileSync(req.file.path);
-  formData.append(
-    "file",
-    new Blob([file], { type: req.file.mimetype }),
-    req.file.originalname
-  );
-  console.log(apikey);
-  const response = await axios.post(url, formData, {
-    headers: {
-      apikey: apikey,
-      OCREngine: 2,
-      "Content-Type": "multipart/form-data",
-    },
-  });
-
-  if (response) {
-    const data = response.data.ParsedResults[0].ParsedText;
-    console.log(data);
-    await cleanup(`./uploads/${req.file.filename}`);
-    const cleandata = await callopenai(data);
-    const jsondata = atoj(cleandata.split(","));
-    res.json(jsondata);
-  } else {
-    next();
+    if (response) {
+      const data = response.data.ParsedResults[0].ParsedText;
+      console.log(data);
+      await cleanup(`./uploads/${req.file.filename}`);
+      const cleandata = await callopenai(data);
+      const jsondata = atoj(cleandata.split(","));
+      res.json(jsondata);
+    } else {
+      next();
+    }
+  } catch (err) {
+    console.log(err.message);
   }
 };
 
