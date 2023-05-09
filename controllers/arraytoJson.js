@@ -19,3 +19,12 @@ const dta = ["hello", "this", "is", "the"];
 atoj(dta);
 
 module.exports = atoj;
+
+/* 
+{
+  "concepts":[
+    { id: count, concept: x, checked: true },
+    { id: count, concept: x, checked: true }
+    
+  ]
+} */

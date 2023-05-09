@@ -15,7 +15,7 @@ const file = fs.readFileSync(fpath);
 const formData = new FormData();
 formData.append("file", new Blob([file], { type: "image/jpeg" }), "image.jpg"); */
 
-const ocrController = async (req, res, next) => {
+const ocrController = async (req, res) => {
   console.log(req.file);
   console.log(req.file.buffer);
   try {
@@ -41,7 +41,7 @@ const ocrController = async (req, res, next) => {
       await cleanup(`./uploads/${req.file.filename}`);
       const cleandata = await callopenai(data);
       const jsondata = atoj(cleandata.split(","));
-      res.json(jsondata);
+      res.status(200).json(jsondata);
     } else {
       next();
     }

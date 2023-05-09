@@ -12,16 +12,16 @@ const Ucontroller = async (req, res) => {
   const chart = rated ? "mostPopular" : "";
 
   console.log(query);
-  //let channelid = "UC8butISFwT-Wl7EV0hUK0BQ";
-  // if (chn) {
-  //   console.log(chn);
-  //   const d = await youtube.search.list({
-  //     part: "snippet",
-  //     type: "channel",
-  //     q: chn,
-  //   });
-  //   channelid = d.data.items[0].id.channelId;
-  // }
+  let channelid = null;
+  if (chn) {
+    console.log(chn);
+    const d = await youtube.search.list({
+      part: "snippet",
+      type: "channel",
+      q: chn,
+    });
+    channelid = d.data.items[0].id.channelId;
+  }
 
   const item = await youtube.search.list({
     part: "snippet",
@@ -29,10 +29,11 @@ const Ucontroller = async (req, res) => {
     type: "video",
     maxResults: 1,
     chart: chart,
-    //channelId: channelid,
+    channelId: channelid,
   });
 
-  const content = await wikiController(query);
+  const content = await wikiController(query.split(" ")[2]);
+  // console.log(query.split(" ")[2]);
   const vidlist = {
     id: item.data.items[0].id.videoId,
     q: item.config.params.q,
