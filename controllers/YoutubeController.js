@@ -13,7 +13,9 @@ const Ucontroller = async (req, res) => {
   const chart = rated ? "mostPopular" : "";
 
   try {
-    console.log(query.split(" ")[2]);
+    //console.log(query.split(" ")[2]);
+    console.log(query, sub, chn, rated);
+
     let channelid = null;
     if (chn) {
       console.log(chn);
