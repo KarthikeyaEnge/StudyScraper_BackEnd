@@ -9,6 +9,7 @@ const url = "https://api.ocr.space/parse/image";
 const callopenai = require("../controllers/openaiController");
 const cleanup = require("../controllers/cleanUp");
 const atoj = require("../controllers/arraytoJson");
+const palmController = require("./palmController");
 
 /* const fpath = "./img.jpg";
 const file = fs.readFileSync(fpath);
@@ -39,7 +40,8 @@ const ocrController = async (req, res) => {
       const data = response.data.ParsedResults[0].ParsedText;
       console.log(data);
       await cleanup(`./uploads/${req.file.filename}`);
-      const cleandata = await callopenai(data);
+      //const cleandata = await callopenai(data);
+      const cleandata = await palmController(data);
       const jsondata = atoj(cleandata.split(","));
       res.status(200).json(jsondata);
     } else {
