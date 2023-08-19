@@ -17,8 +17,6 @@ app.use("/datacall", require("./middleware/ocr_middleware"));
 
 app.use("/videocall", require("./middleware/Youtube_middleware"));
 
-app.use("/users", require("./Routers/Dbroute"));
-
 app.listen(PORT, () => {
   console.log(`Server running in port:${PORT}`);
 });
