@@ -8,10 +8,10 @@ const wikiController = async (data) => {
   let fullurl = null;
   let refs = null;
   try {
-    page = await wiki.page(data.toLowerCase());
-    intro = await page.intro();
-    fullurl = page.fullurl;
-    refs = await page.references();
+    page = await wiki?.page(data.toLowerCase());
+    intro = await page?.intro();
+    fullurl = page?.fullurl;
+    refs = await page?.references();
   } catch (err) {
     //logs
     console.log(err.message);

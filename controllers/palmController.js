@@ -69,12 +69,13 @@ extract all the concepts by removing all the brackets in above text as comma sep
     },
   });
 
-  console.log(result[0].candidates[0].output);
+  console.log(result[0]?.candidates[0]?.output);
   /* .then((result) => {
       console.log(result[0].candidates[0].output);
       return result[0].candidates[0].output;
     }); */
-  return result[0].candidates[0].output;
+  const data = await result[0]?.candidates[0]?.output;
+  return data;
 };
 
 module.exports = palmController;

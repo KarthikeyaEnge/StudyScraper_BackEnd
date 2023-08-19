@@ -13,7 +13,6 @@ const Ucontroller = async (req, res) => {
   const chart = rated ? "mostPopular" : "";
 
   try {
-    //console.log(query.split(" ")[2]);
     console.log(query, sub, chn, rated);
 
     let channelid = null;
@@ -29,7 +28,7 @@ const Ucontroller = async (req, res) => {
 
     const item = await youtube.search.list({
       part: "snippet",
-      q: sub + query,
+      q: query + " " + sub,
       type: "video",
       maxResults: 1,
       chart: chart,
