@@ -2,9 +2,10 @@ const { google } = require("googleapis");
 const wikiController = require("./wikiController");
 const youtube = google.youtube({
   version: "v3",
-  auth: process.env.YOUTUBE_API,
+  auth: process.env.YOUTUBE_API2,
 });
-
+const { YoutubeTranscript } = require("youtube-transcript");
+const palmController = require("./palmController");
 const Ucontroller = async (req, res) => {
   const query = req.body.query.q;
   const sub = req.body.query.subject;
@@ -30,12 +31,36 @@ const Ucontroller = async (req, res) => {
     const item = await youtube.search.list({
       part: "snippet",
       q: sub + query,
+
       type: "video",
       maxResults: 1,
       chart: chart,
       channelId: channelid,
     });
 
+    /* const capresponse = await youtube.captions.list({
+      part: "snippet",
+      videoId: item.data.items[0].id.videoId,
+    });
+
+    const captions = capresponse.data.items;
+    console.log(captions); */
+    /* const capdata = await youtube.captions.download({
+      id: captions[0].id,
+      tfmt: "srt",
+      tlang: "en",
+    });
+    console.log(capdata.data); */
+    const cap = await YoutubeTranscript.fetchTranscript(
+      item.data.items[0].id.videoId
+    );
+    caption = "";
+    cap.map((item) => {
+      caption += item.text;
+    });
+    //console.log(caption);
+    const summary = await palmController(caption, "2");
+    //print(summary);
     const content = await wikiController(query);
 
     // console.log(query.split(" ")[2]);
@@ -43,6 +68,7 @@ const Ucontroller = async (req, res) => {
       id: item.data.items[0].id.videoId,
       q: item.config.params.q,
       content: content,
+      cap: summary,
     };
 
     //res.send(vidlist);

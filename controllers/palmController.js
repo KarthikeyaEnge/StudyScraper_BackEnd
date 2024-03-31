@@ -6,7 +6,7 @@ require("dotenv").config();
 const MODEL_NAME = "models/text-bison-001";
 const API_KEY = process.env.PALM_API;
 
-const palmController = async (promptString) => {
+const palmController = async (promptString, option) => {
   const client = new TextServiceClient({
     authClient: new GoogleAuth().fromAPIKey(API_KEY),
   });
@@ -39,6 +39,16 @@ Allocation of frames and thrashing.
 extract all the concepts by removing all the brackets in above text as comma seperated text
 `; */
   const stopSequences = [];
+  prompt = "";
+  if (option === "1") {
+    prompt = {
+      text: `${promptString}\n\nextract all the concepts by removing all the brackets in above text as comma seperated text`,
+    };
+  } else {
+    prompt = {
+      text: `summarize\t${promptString}\t into a paragraph, if it is in any other language please translate it to english first. and summarize it into a paragraph. '''don't mention the language it is translated from'''`,
+    };
+  }
 
   const result = await client.generateText({
     // required, which model to use to generate the result
@@ -64,9 +74,7 @@ extract all the concepts by removing all the brackets in above text as comma sep
       { category: "HARM_CATEGORY_MEDICAL", threshold: 2 },
       { category: "HARM_CATEGORY_DANGEROUS", threshold: 2 },
     ],
-    prompt: {
-      text: `${promptString}\n\nextract all the concepts by removing all the brackets in above text as comma seperated text`,
-    },
+    prompt,
   });
 
   console.log(result[0].candidates[0].output);

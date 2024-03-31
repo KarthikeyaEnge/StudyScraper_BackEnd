@@ -41,7 +41,7 @@ const ocrController = async (req, res) => {
       console.log(data);
       await cleanup(`./uploads/${req.file.filename}`);
       //const cleandata = await callopenai(data);
-      const cleandata = await palmController(data);
+      const cleandata = await palmController(data, "1");
       const jsondata = atoj(cleandata.split(","));
       res.status(200).json(jsondata);
     } else {
